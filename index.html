@@ -115,46 +115,33 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "กำลังบันทึกข้อมูล...";
 
-            const signatureData = signaturePad.toDataURL(); 
+            // ลิงก์ใหม่ล่าสุดที่คุณให้มา
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzAy17t3UH_il1YKqsj9Cw7pRPpLzizVfAvafbe4YZ8BBYWa5WUhu9J6IieSxVBeGG5/exec';
+            
+            // ใช้ URLSearchParams บังคับส่งแบบ Query String ตัวพิมพ์เล็กทั้งหมดให้ตรงกับหลังบ้าน
+            const params = new URLSearchParams();
+            params.append('fullname', document.getElementById('fullName').value);
+            params.append('position', document.getElementById('position').value);
+            params.append('company', document.getElementById('company').value);
+            params.append('escortby', document.getElementById('escortBy').value);
+            params.append('purpose', document.getElementById('purpose').value);
+            params.append('timein', document.getElementById('timeIn').value);
+            params.append('timeout', document.getElementById('timeOut').value);
+            params.append('signature', signaturePad.toDataURL());
 
-            // จัดโครงสร้างตัวแปรเป็นตัวพิมพ์เล็กทั้งหมดให้ตรงกับ Google Apps Script เวอร์ชันแก้เพี้ยน
-            const logData = {
-                fullname: document.getElementById('fullName').value,
-                position: document.getElementById('position').value,
-                company: document.getElementById('company').value,
-                escortby: document.getElementById('escortBy').value,
-                purpose: document.getElementById('purpose').value,
-                timein: document.getElementById('timeIn').value,
-                timeout: document.getElementById('timeOut').value,
-                signature: signatureData 
-            };
-
-            // ใช้ลิงก์ใหม่ล่าสุดของคุณ
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzodxEyD4hkaayZsksw8lVf7vAsZJ2l32Khf4UMZ9CJpVYRdmPvt4iTZ9bnjA1CU6bP/exec';
-
-            // ส่งข้อมูลแบบ Text/Plain เพื่อเลี่ยงปัญหา CORS และรับผลลัพธ์ย้อนกลับได้สมบูรณ์
-            fetch(scriptURL, {
+            // ส่งข้อมูลแบบ no-cors ผ่านขบวน POST เสถียรและตัดปัญหากวนใจเรื่องแคช
+            fetch(`${scriptURL}?${params.toString()}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
-                body: JSON.stringify(logData)
+                mode: 'no-cors'
             })
-            .then(res => res.json())
-            .then(response => {
-                if(response.result === "success") {
-                    alert("บันทึกข้อมูลและรูปภาพลายเซ็นสำเร็จเรียบร้อยแล้วค่ะ!");
-                    document.getElementById('visitorForm').reset();
-                    signaturePad.clear();
-                } else {
-                    alert("เกิดข้อผิดพลาดจากระบบหลังบ้าน: " + response.error);
-                }
-            })
-            .catch(error => {
-                // เผื่อกรณี Google Redirect แล้วติดตัวตรวจของเบราว์เซอร์ แต่ข้อมูลส่วนใหญ่จะเข้าชีตสำเร็จแล้ว
-                alert("ส่งข้อมูลเรียบร้อยแล้ว! รบกวนตรวจสอบใน Google Sheets อีกครั้งนะคะ");
+            .then(() => {
+                alert("บันทึกข้อมูลและรูปภาพลายเซ็นสำเร็จเรียบร้อยแล้วค่ะ!");
                 document.getElementById('visitorForm').reset();
                 signaturePad.clear();
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
             })
             .finally(() => {
                 submitBtn.disabled = false;
