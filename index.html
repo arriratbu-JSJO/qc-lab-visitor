@@ -111,7 +111,7 @@
                 return;
             }
 
-            const signatureData = signaturePad.toDataURL(); // ดึงข้อมูลภาพ Base64
+            const signatureData = signaturePad.toDataURL(); 
 
             const logData = {
                 fullName: document.getElementById('fullName').value,
@@ -121,10 +121,11 @@
                 purpose: document.getElementById('purpose').value,
                 timeIn: document.getElementById('timeIn').value,
                 timeOut: document.getElementById('timeOut').value,
-                signature: signatureData // ส่งรูปภาพลายเซ็นดิบไปประมวลผลต่อ
+                signature: signatureData 
             };
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwilk3aB5o69UZalJZ6qCSd7QaFe0nUecBy3V-LdMV0NdlxxVgxJUkYDyl1UVK6Sfrc/exec';
+            // อัปเดตลิงก์สคริปต์ตัวล่าสุดเรียบร้อยแล้วค่ะ
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyxy2ObvC4vzja6yrFkBH8_0tAUaQuGuO_9ro9iW8Vp48iehaw8ASqAD5H8ECMZ0ZTp/exec';
 
             fetch(scriptURL, {
                 method: 'POST',
