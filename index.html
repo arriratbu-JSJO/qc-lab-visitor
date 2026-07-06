@@ -111,22 +111,22 @@
                 return;
             }
 
-            // ดึงข้อมูลภาพวาดออกมาเป็น Base64 String
             const signatureData = signaturePad.toDataURL(); 
 
+            // ส่งค่าไปเป็นตัวพิมพ์เล็กทั้งหมดให้ตรงกับ Google Apps Script เวอร์ชันแก้ไข
             const logData = {
-                fullName: document.getElementById('fullName').value,
+                fullname: document.getElementById('fullName').value,
                 position: document.getElementById('position').value,
                 company: document.getElementById('company').value,
-                escortBy: document.getElementById('escortBy').value,
+                escortby: document.getElementById('escortBy').value,
                 purpose: document.getElementById('purpose').value,
-                timeIn: document.getElementById('timeIn').value,
-                timeOut: document.getElementById('timeOut').value,
+                timein: document.getElementById('timeIn').value,
+                timeout: document.getElementById('timeOut').value,
                 signature: signatureData 
             };
 
-            // อัปเดต URL ล่าสุดที่คุณให้มาเรียบร้อยค่ะ
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyh6UqCIsH3OxZBagF8zQkAdls9uj4_bcOeiBBiM3oVs32uyBP1RV23ZuUg5BJb-44/exec';
+            // อัปเดตลิงก์ใหม่ของคุณเรียบร้อยค่ะ
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwyUEhikU9_OJtXSIpCXxwijSgYJa66QwNro285xSyuKa3cdncnOIuZfOyMxbrTe-3a/exec';
 
             fetch(scriptURL, {
                 method: 'POST',
