@@ -136,27 +136,35 @@
             // Get signature as Base64 Image Data
             const signatureData = signaturePad.toDataURL();
 
-            // Collect All Data
-            const logData = {
-                fullName: document.getElementById('fullName').value,
-                position: document.getElementById('position').value,
-                company: document.getElementById('company').value,
-                escortBy: document.getElementById('escortBy').value,
-                purpose: document.getElementById('purpose').value,
-                timeIn: document.getElementById('timeIn').value,
-                timeOut: document.getElementById('timeOut').value || "Not checked out yet",
-                signature: signatureData
-            };
+                    // // Collect All Data
+        const logData = {
+            name: document.getElementById('fullName').value,
+            company: document.getElementById('company').value,
+            purpose: document.getElementById('purpose').value,
+            signature: signatureData
+        };
 
-            // Log output to console (Ready to connect with Backend / Google Sheets)
-            console.log("Form Submitted Successfully:", logData);
-            
-            alert("Success! Your visit has been recorded.");
-            
-            // Reset form and signature
+        // ส่งข้อมูลไปที่ Google Sheets
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwilk3aB5o69UZalJZ6qCSd7QaFe0nUecBy3V-LdMV0NdlxxVgxJUkYDyl1UVK6Sfrc/exec';
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(logData)
+        })
+        .then(() => {
+            alert("บันทึกข้อมูลและส่งรายชื่อสำเร็จเรียบร้อยแล้วค่ะ!");
             this.reset();
             signaturePad.clear();
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
         });
+
     </script>
 </body>
 </html>
