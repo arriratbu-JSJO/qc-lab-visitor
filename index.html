@@ -115,10 +115,10 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "กำลังบันทึกข้อมูล...";
 
-            // ลิงก์ใหม่ล่าสุดที่คุณให้มา
+            // ลิงก์ Web App ล่าสุดของคุณ
             const scriptURL = 'https://script.google.com/macros/s/AKfycbzAy17t3UH_il1YKqsj9Cw7pRPpLzizVfAvafbe4YZ8BBYWa5WUhu9J6IieSxVBeGG5/exec';
             
-            // ใช้ URLSearchParams บังคับส่งแบบ Query String ตัวพิมพ์เล็กทั้งหมดให้ตรงกับหลังบ้าน
+            // ใช้ URLSearchParams ส่งแบบ Query String เพื่อความเสถียรสูงสุด
             const params = new URLSearchParams();
             params.append('fullname', document.getElementById('fullName').value);
             params.append('position', document.getElementById('position').value);
@@ -129,13 +129,12 @@
             params.append('timeout', document.getElementById('timeOut').value);
             params.append('signature', signaturePad.toDataURL());
 
-            // ส่งข้อมูลแบบ no-cors ผ่านขบวน POST เสถียรและตัดปัญหากวนใจเรื่องแคช
             fetch(`${scriptURL}?${params.toString()}`, {
                 method: 'POST',
                 mode: 'no-cors'
             })
             .then(() => {
-                alert("บันทึกข้อมูลและรูปภาพลายเซ็นสำเร็จเรียบร้อยแล้วค่ะ!");
+                alert("บันทึกข้อมูลสำเร็จเรียบร้อยแล้วค่ะ! กรุณาเช็กที่แผ่นงาน 'ชีต1' ได้เลยนะคะ");
                 document.getElementById('visitorForm').reset();
                 signaturePad.clear();
             })
