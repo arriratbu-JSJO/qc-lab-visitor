@@ -115,10 +115,9 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "กำลังบันทึกข้อมูล...";
 
-            // ลิงก์ Web App ล่าสุดของคุณ
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzAy17t3UH_il1YKqsj9Cw7pRPpLzizVfAvafbe4YZ8BBYWa5WUhu9J6IieSxVBeGG5/exec';
+            // เปลี่ยนเป็นลิงก์ Web App ตัวล่าสุดที่คุณเพิ่งเจาะจงสร้างมาตะกี้เลยค่ะ
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwlYCQBHIl5ZQahmLshHIq-cF1VIPUrPI-OjsaFDH11I4LD7ed6y8TuRJRfTaQj8qSH/exec';
             
-            // ใช้ URLSearchParams ส่งแบบ Query String เพื่อความเสถียรสูงสุด
             const params = new URLSearchParams();
             params.append('fullname', document.getElementById('fullName').value);
             params.append('position', document.getElementById('position').value);
@@ -134,13 +133,13 @@
                 mode: 'no-cors'
             })
             .then(() => {
-                alert("บันทึกข้อมูลสำเร็จเรียบร้อยแล้วค่ะ! กรุณาเช็กที่แผ่นงาน 'ชีต1' ได้เลยนะคะ");
+                alert("ส่งข้อมูลเรียบร้อยแล้วค่ะ! ลองดูในตารางหน้าแท็บ 'ชีต1' ได้เลยค่ะ");
                 document.getElementById('visitorForm').reset();
                 signaturePad.clear();
             })
             .catch(error => {
                 console.error('Error!', error.message);
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหมี่อีกครั้ง");
             })
             .finally(() => {
                 submitBtn.disabled = false;
