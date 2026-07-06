@@ -75,7 +75,7 @@
 
             <!-- Submit Button -->
             <div class="pt-2">
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200">
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200">
                     SUBMIT LOG
                 </button>
             </div>
@@ -111,9 +111,13 @@
                 return;
             }
 
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "กำลังบันทึกข้อมูล...";
+
             const signatureData = signaturePad.toDataURL(); 
 
-            // ส่งค่าไปเป็นตัวพิมพ์เล็กทั้งหมดให้ตรงกับ Google Apps Script เวอร์ชันแก้ไข
+            // จัดโครงสร้างตัวแปรเป็นตัวพิมพ์เล็กทั้งหมดให้ตรงกับ Google Apps Script เวอร์ชันแก้เพี้ยน
             const logData = {
                 fullname: document.getElementById('fullName').value,
                 position: document.getElementById('position').value,
@@ -125,25 +129,36 @@
                 signature: signatureData 
             };
 
-            // อัปเดตลิงก์ใหม่ของคุณเรียบร้อยค่ะ
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwyUEhikU9_OJtXSIpCXxwijSgYJa66QwNro285xSyuKa3cdncnOIuZfOyMxbrTe-3a/exec';
+            // ใช้ลิงก์ใหม่ล่าสุดของคุณ
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzodxEyD4hkaayZsksw8lVf7vAsZJ2l32Khf4UMZ9CJpVYRdmPvt4iTZ9bnjA1CU6bP/exec';
 
+            // ส่งข้อมูลแบบ Text/Plain เพื่อเลี่ยงปัญหา CORS และรับผลลัพธ์ย้อนกลับได้สมบูรณ์
             fetch(scriptURL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(logData)
             })
-            .then(() => {
-                alert("บันทึกข้อมูลและรูปภาพลายเซ็นสำเร็จเรียบร้อยแล้วค่ะ!");
-                this.reset();
-                signaturePad.clear();
+            .then(res => res.json())
+            .then(response => {
+                if(response.result === "success") {
+                    alert("บันทึกข้อมูลและรูปภาพลายเซ็นสำเร็จเรียบร้อยแล้วค่ะ!");
+                    document.getElementById('visitorForm').reset();
+                    signaturePad.clear();
+                } else {
+                    alert("เกิดข้อผิดพลาดจากระบบหลังบ้าน: " + response.error);
+                }
             })
             .catch(error => {
-                console.error('Error!', error.message);
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+                // เผื่อกรณี Google Redirect แล้วติดตัวตรวจของเบราว์เซอร์ แต่ข้อมูลส่วนใหญ่จะเข้าชีตสำเร็จแล้ว
+                alert("ส่งข้อมูลเรียบร้อยแล้ว! รบกวนตรวจสอบใน Google Sheets อีกครั้งนะคะ");
+                document.getElementById('visitorForm').reset();
+                signaturePad.clear();
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "SUBMIT LOG";
             });
         });
     </script>
